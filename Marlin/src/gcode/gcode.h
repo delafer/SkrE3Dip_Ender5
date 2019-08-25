@@ -68,6 +68,7 @@
  * G38  - Probe in any direction using the Z_MIN_PROBE (Requires G38_PROBE_TARGET)
  * G42  - Coordinated move to a mesh point (Requires MESH_BED_LEVELING, AUTO_BED_LEVELING_BLINEAR, or AUTO_BED_LEVELING_UBL)
  * G80  - Cancel current motion mode (Requires GCODE_MOTION_MODES)
+ * G81  - Drilling Cycle (Requires CNC_DRILLING_CYCLE)
  * G90  - Use Absolute Coordinates
  * G91  - Use Relative Coordinates
  * G92  - Set current position to coordinates given
@@ -438,10 +439,15 @@ private:
     static void G57();
     static void G58();
     static void G59();
+
   #endif
 
   #if ENABLED(GCODE_MOTION_MODES)
     static void G80();
+  #endif
+
+  #if ENABLED(CNC_DRILLING_CYCLE)
+    static void G81();
   #endif
 
   static void G92();
