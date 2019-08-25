@@ -1,4 +1,3 @@
-
 /**
  * Marlin 3D Printer Firmware
  * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
@@ -289,7 +288,7 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-//#define FAN_KICKSTART_TIME 100
+#define FAN_KICKSTART_TIME 200
 
 /**
  * PWM Fan Scaling
@@ -519,7 +518,7 @@
 #define X_HOME_BUMP_MM 5
 #define Y_HOME_BUMP_MM 5
 #define Z_HOME_BUMP_MM 2
-#define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
+#define HOMING_BUMP_DIVISOR { 4, 4, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 #define QUICK_HOME                       // If homing includes X and Y, do a diagonal move initially
 //#define HOMING_BACKOFF_MM { 2, 2, 2 }  // (mm) Move away from the endstops after homing
 
@@ -637,7 +636,7 @@
 // Default stepper release if idle. Set to 0 to deactivate.
 // Steppers will shut down DEFAULT_STEPPER_DEACTIVE_TIME seconds after the last move when DISABLE_INACTIVE_? is true.
 // Time can be set by M18 and M84.
-#define DEFAULT_STEPPER_DEACTIVE_TIME 120
+#define DEFAULT_STEPPER_DEACTIVE_TIME 300
 #define DISABLE_INACTIVE_X true
 #define DISABLE_INACTIVE_Y true
 #define DISABLE_INACTIVE_Z false  // Set to false if the nozzle will fall down on your printed part when print has finished.
@@ -662,7 +661,7 @@
 // @section motion
 
 // Minimum time that a segment needs to take if the buffer is emptied
-#define DEFAULT_MINSEGMENTTIME        20000   // (ms)
+#define DEFAULT_MINSEGMENTTIME        50000   // (ms)
 
 // If defined the movements slow down when the look ahead buffer is only half full
 #define SLOWDOWN
@@ -889,7 +888,7 @@
 //#define LCD_DECIMAL_SMALL_XY
 
 // The timeout (in ms) to return to the status screen from sub-menus
-//#define LCD_TIMEOUT_TO_STATUS 15000
+#define LCD_TIMEOUT_TO_STATUS 60000
 
 // Add an 'M73' G-code to set the current percentage
 //#define LCD_SET_PROGRESS_MANUALLY
@@ -989,7 +988,7 @@
   #endif
 
   // This allows hosts to request long names for files and folders with M33
-  //#define LONG_FILENAME_HOST_SUPPORT
+  #define LONG_FILENAME_HOST_SUPPORT
 
   // Enable this option to scroll long filenames in the SD card menu
   #define SCROLL_LONG_FILENAMES
@@ -1411,7 +1410,7 @@
 // The number of linear motions that can be in the plan at any give time.
 // THE BLOCK_BUFFER_SIZE NEEDS TO BE A POWER OF 2 (e.g. 8, 16, 32) because shifts and ors are used to do the ring-buffering.
 #if ENABLED(SDSUPPORT)
-  #define BLOCK_BUFFER_SIZE 16 // SD,LCD,Buttons take more memory, block buffer needs to be smaller
+  #define BLOCK_BUFFER_SIZE 32 // SD,LCD,Buttons take more memory, block buffer needs to be smaller
 #else
   #define BLOCK_BUFFER_SIZE 16 // maximize block buffer
 #endif
@@ -1420,7 +1419,7 @@
 
 // The ASCII buffer for serial input
 #define MAX_CMD_SIZE 96
-#define BUFSIZE 4
+#define BUFSIZE 32
 
 // Transmission to Host Buffer Size
 // To save 386 bytes of PROGMEM (and TX_BUFFER_SIZE+3 bytes of RAM) set to 0.
@@ -1719,7 +1718,7 @@
   #define INTERPOLATE       true  // Interpolate X/Y/Z_MICROSTEPS to 256
 
   #if AXIS_IS_TMC(X)
-    #define X_CURRENT     800  // (mA) RMS current. Multiply by 1.414 for peak current.
+    #define X_CURRENT     520  // (mA) RMS current. Multiply by 1.414 for peak current.
     #define X_MICROSTEPS   32  // 0..256
     #define X_RSENSE     0.075
   #endif
@@ -1731,7 +1730,7 @@
   #endif
 
   #if AXIS_IS_TMC(Y)
-    #define Y_CURRENT     800
+    #define Y_CURRENT     680
     #define Y_MICROSTEPS   32
     #define Y_RSENSE     0.075
   #endif
@@ -1743,7 +1742,7 @@
   #endif
 
   #if AXIS_IS_TMC(Z)
-    #define Z_CURRENT     800
+    #define Z_CURRENT     505
     #define Z_MICROSTEPS   32
     #define Z_RSENSE     0.075
   #endif
@@ -1761,7 +1760,7 @@
   #endif
 
   #if AXIS_IS_TMC(E0)
-    #define E0_CURRENT    800
+    #define E0_CURRENT    645
     #define E0_MICROSTEPS  32
     #define E0_RSENSE    0.075
   #endif
@@ -1837,13 +1836,13 @@
    * on the same serial port, either here or in your board's pins file.
    */
   #define  X_SLAVE_ADDRESS 0
-  #define  Y_SLAVE_ADDRESS 1
-  #define  Z_SLAVE_ADDRESS 2
+  #define  Y_SLAVE_ADDRESS 0
+  #define  Z_SLAVE_ADDRESS 0
   #define X2_SLAVE_ADDRESS 0
   #define Y2_SLAVE_ADDRESS 0
   #define Z2_SLAVE_ADDRESS 0
   #define Z3_SLAVE_ADDRESS 0
-  #define E0_SLAVE_ADDRESS 3
+  #define E0_SLAVE_ADDRESS 0
   #define E1_SLAVE_ADDRESS 0
   #define E2_SLAVE_ADDRESS 0
   #define E3_SLAVE_ADDRESS 0
@@ -1881,7 +1880,7 @@
    * Define you own with
    * { <off_time[1..15]>, <hysteresis_end[-3..12]>, hysteresis_start[1..8] }
    */
-  #define CHOPPER_TIMING CHOPPER_DEFAULT_12V
+  #define CHOPPER_TIMING CHOPPER_DEFAULT_24V
 
   /**
    * Monitor Trinamic drivers for error conditions,
@@ -1894,7 +1893,7 @@
    * M912 - Clear stepper driver overtemperature pre-warn condition flag.
    * M122 - Report driver parameters (Requires TMC_DEBUG)
    */
-  //#define MONITOR_DRIVER_STATUS
+  #define MONITOR_DRIVER_STATUS
 
   #if ENABLED(MONITOR_DRIVER_STATUS)
     #define CURRENT_STEP_DOWN     50  // [mA]
@@ -1975,7 +1974,7 @@
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continous reporting.
    */
-  //#define TMC_DEBUG
+  #define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
@@ -2335,7 +2334,7 @@
 /**
  * Disable all Volumetric extrusion options
  */
-//#define NO_VOLUMETRICS
+#define NO_VOLUMETRICS
 
 #if DISABLED(NO_VOLUMETRICS)
   /**
@@ -2667,6 +2666,7 @@
 
 // Enable Marlin dev mode which adds some special commands
 //#define MARLIN_DEV_MODE
+
 
 
 
