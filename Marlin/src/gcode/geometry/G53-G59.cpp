@@ -29,7 +29,8 @@
 
 /**
  * Select a coordinate system and update the workspace offset.
- * System index -1 is used to specify machine-native.
+ * System index -1 is used to specify machine-
+ ve.
  */
 bool GcodeSuite::select_coordinate_system(const int8_t _new) {
   if (active_coordinate_system == _new) return false;
@@ -49,7 +50,6 @@ bool GcodeSuite::select_coordinate_system(const int8_t _new) {
   }
   return true;
 }
-
 /**
  * G53: Apply native workspace to the current move
  *
@@ -60,14 +60,36 @@ bool GcodeSuite::select_coordinate_system(const int8_t _new) {
  * Marlin also uses G53 on a line by itself to go back to native space.
  */
 void GcodeSuite::G53() {
-  const int8_t _system = active_coordinate_system;
-  active_coordinate_system = -1;
+  planner.synchronize();
+  float current_offset[XYZ] = { 0 };
   if (parser.chain()) { // If this command has more following...
+    // Switch to native space, process gcode, switch back to selected workspace
+    COPY(current_offset, coordinate_system[active_coordinate_system]);
+    LOOP_XYZ(i){
+      position_shift[i] = 0;
+      update_workspace_offset((AxisEnum)i);
+    }
     process_parsed_command();
-    active_coordinate_system = _system;
+    SERIAL_ECHOLNPAIR("Switch to native space ");
+    report_current_position();
+    LOOP_XYZ(i){
+      position_shift[i] = current_offset[i];
+      update_workspace_offset((AxisEnum)i);
+    }
+    SERIAL_ECHOLNPAIR("Switch back to workspace ");
+    report_current_position();
+  }
+  else {
+    //Switch to native space
+    LOOP_XYZ(i){
+      position_shift[i] = 0;
+      update_workspace_offset((AxisEnum)i);
+    }
+    active_coordinate_system = -1;
+    SERIAL_ECHOLNPAIR("Switch to native space ");
+    report_current_position();
   }
 }
-
 /**
  * G54-G59.3: Select a new workspace
  *
