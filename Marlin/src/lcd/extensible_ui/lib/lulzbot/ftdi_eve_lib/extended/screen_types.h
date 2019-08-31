@@ -201,7 +201,8 @@ class CachedScreen {
 
       if (dlcache.has_data()) {
         dlcache.append();
-      } else {
+      }
+      else {
         current_screen.onRedraw(BACKGROUND);
         dlcache.store(DL_SIZE);
       }

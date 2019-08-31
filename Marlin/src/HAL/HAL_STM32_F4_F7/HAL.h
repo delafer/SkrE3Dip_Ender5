@@ -160,9 +160,6 @@ uint8_t HAL_get_reset_source(void);
 
 void _delay_ms(const int delay);
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-
 /*
 extern "C" {
   int freeMemory(void);
@@ -179,7 +176,10 @@ static int freeMemory() {
 }
 */
 
-static int freeMemory() {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+
+static inline int freeMemory(void) {
   volatile char top;
   return &top - reinterpret_cast<char*>(_sbrk(0));
 }
