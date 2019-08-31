@@ -462,7 +462,7 @@ void GcodeSuite::G28(const bool always_home_all) {
     if (_HOME_SYNC)
       SERIAL_ECHOLNPGM(MSG_Z_MOVE_COMP);
   #endif
-
+  /**	
   #if ENABLED(CNC_COORDINATE_SYSTEMS)
     float current_offset[XYZ] = { 0 };
     if (active_coordinate_system != -1){
@@ -475,7 +475,7 @@ void GcodeSuite::G28(const bool always_home_all) {
     report_current_position();
     }
   #endif
-
+  */
   if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("<<< G28");
 
   #if HAS_DRIVER(L6470)
