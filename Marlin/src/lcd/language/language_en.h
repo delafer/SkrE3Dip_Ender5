@@ -50,25 +50,25 @@
 #endif
 
 #ifndef WELCOME_MSG
-  #define WELCOME_MSG                         MACHINE_NAME _UxGT(" Ready.")
+  #define WELCOME_MSG                         MACHINE_NAME _UxGT(" Ok.")
 #endif
 #ifndef MSG_YES
-  #define MSG_YES                             _UxGT("YES")
+  #define MSG_YES                             _UxGT("Y")
 #endif
 #ifndef MSG_NO
-  #define MSG_NO                              _UxGT("NO")
+  #define MSG_NO                              _UxGT("N")
 #endif
 #ifndef MSG_BACK
-  #define MSG_BACK                            _UxGT("Back")
+  #define MSG_BACK                            _UxGT("<-")
 #endif
 #ifndef MSG_MEDIA_ABORTING
-  #define MSG_MEDIA_ABORTING                  _UxGT("Aborting...")
+  #define MSG_MEDIA_ABORTING                  _UxGT("Stoping..")
 #endif
 #ifndef MSG_MEDIA_INSERTED
-  #define MSG_MEDIA_INSERTED                  _UxGT("Media Inserted")
+  #define MSG_MEDIA_INSERTED                  _UxGT("SD Found")
 #endif
 #ifndef MSG_MEDIA_REMOVED
-  #define MSG_MEDIA_REMOVED                   _UxGT("Media Removed")
+  #define MSG_MEDIA_REMOVED                   _UxGT("No SD")
 #endif
 #ifndef MSG_MEDIA_RELEASED
   #define MSG_MEDIA_RELEASED                  _UxGT("Media Released")
@@ -77,76 +77,76 @@
   #define MSG_MEDIA_WAITING                   _UxGT("Waiting for media")
 #endif
 #ifndef MSG_MEDIA_READ_ERROR
-  #define MSG_MEDIA_READ_ERROR                _UxGT("Media read error")
+  #define MSG_MEDIA_READ_ERROR                _UxGT("CRC error")
 #endif
 #ifndef MSG_MEDIA_USB_REMOVED
-  #define MSG_MEDIA_USB_REMOVED               _UxGT("USB device removed")
+  #define MSG_MEDIA_USB_REMOVED               _UxGT("USB removed")
 #endif
 #ifndef MSG_MEDIA_USB_FAILED
-  #define MSG_MEDIA_USB_FAILED                _UxGT("USB start failed")
+  #define MSG_MEDIA_USB_FAILED                _UxGT("USB failed")
 #endif
 #ifndef MSG_LCD_ENDSTOPS
   #define MSG_LCD_ENDSTOPS                    _UxGT("Endstops") // Max length 8 characters
 #endif
 #ifndef MSG_LCD_SOFT_ENDSTOPS
-  #define MSG_LCD_SOFT_ENDSTOPS               _UxGT("Soft Endstops")
+  #define MSG_LCD_SOFT_ENDSTOPS               _UxGT("S-Endstops")
 #endif
 #ifndef MSG_MAIN
   #define MSG_MAIN                            _UxGT("Main")
 #endif
 #ifndef MSG_ADVANCED_SETTINGS
-  #define MSG_ADVANCED_SETTINGS               _UxGT("Advanced Settings")
+  #define MSG_ADVANCED_SETTINGS               _UxGT("Advanced")
 #endif
 #ifndef MSG_CONFIGURATION
-  #define MSG_CONFIGURATION                   _UxGT("Configuration")
+  #define MSG_CONFIGURATION                   _UxGT("Config")
 #endif
 #ifndef MSG_AUTOSTART
   #define MSG_AUTOSTART                       _UxGT("Autostart")
 #endif
-#ifndef MSG_DISABLE_STEPPERS
-  #define MSG_DISABLE_STEPPERS                _UxGT("Disable Steppers")
-#endif
+#ifndef MSG_DISABLE_STEPPERS                                  
+  #define MSG_DISABLE_STEPPERS                _UxGT("Steppers Off")
+#endif                                                       
 #ifndef MSG_DEBUG_MENU
-  #define MSG_DEBUG_MENU                      _UxGT("Debug Menu")
+  #define MSG_DEBUG_MENU                      _UxGT("Debug")
 #endif
 #ifndef MSG_PROGRESS_BAR_TEST
-  #define MSG_PROGRESS_BAR_TEST               _UxGT("Progress Bar Test")
+  #define MSG_PROGRESS_BAR_TEST               _UxGT("PB Test")
 #endif
 #ifndef MSG_AUTO_HOME
   #define MSG_AUTO_HOME                       _UxGT("Auto Home")
 #endif
 #ifndef MSG_AUTO_HOME_X
-  #define MSG_AUTO_HOME_X                     _UxGT("Home X")
+  #define MSG_AUTO_HOME_X                     _UxGT("HomeX")
 #endif
 #ifndef MSG_AUTO_HOME_Y
-  #define MSG_AUTO_HOME_Y                     _UxGT("Home Y")
+  #define MSG_AUTO_HOME_Y                     _UxGT("HomeY")
 #endif
 #ifndef MSG_AUTO_HOME_Z
-  #define MSG_AUTO_HOME_Z                     _UxGT("Home Z")
+  #define MSG_AUTO_HOME_Z                     _UxGT("HomeZ")
 #endif
 #ifndef MSG_AUTO_Z_ALIGN
   #define MSG_AUTO_Z_ALIGN                    _UxGT("Auto Z-Align")
 #endif
 #ifndef MSG_LEVEL_BED_HOMING
-  #define MSG_LEVEL_BED_HOMING                _UxGT("Homing XYZ")
+  #define MSG_LEVEL_BED_HOMING                _UxGT("Home XYZ")
 #endif
 #ifndef MSG_LEVEL_BED_WAITING
   #define MSG_LEVEL_BED_WAITING               _UxGT("Click to Begin")
 #endif
 #ifndef MSG_LEVEL_BED_NEXT_POINT
-  #define MSG_LEVEL_BED_NEXT_POINT            _UxGT("Next Point")
+  #define MSG_LEVEL_BED_NEXT_POINT            _UxGT("-> Point")
 #endif
 #ifndef MSG_LEVEL_BED_DONE
-  #define MSG_LEVEL_BED_DONE                  _UxGT("Leveling Done!")
+  #define MSG_LEVEL_BED_DONE                  _UxGT("Done!")
 #endif
 #ifndef MSG_Z_FADE_HEIGHT
   #define MSG_Z_FADE_HEIGHT                   _UxGT("Fade Height")
 #endif
 #ifndef MSG_SET_HOME_OFFSETS
-  #define MSG_SET_HOME_OFFSETS                _UxGT("Set Home Offsets")
+  #define MSG_SET_HOME_OFFSETS                _UxGT("Set Offsets")
 #endif
 #ifndef MSG_HOME_OFFSETS_APPLIED
-  #define MSG_HOME_OFFSETS_APPLIED            _UxGT("Offsets Applied")
+  #define MSG_HOME_OFFSETS_APPLIED            _UxGT("Done")
 #endif
 #ifndef MSG_SET_ORIGIN
   #define MSG_SET_ORIGIN                      _UxGT("Set Origin")
@@ -188,13 +188,13 @@
   #define MSG_PREHEAT_2_SETTINGS              MSG_PREHEAT_2 _UxGT(" Conf")
 #endif
 #ifndef MSG_PREHEAT_CUSTOM
-  #define MSG_PREHEAT_CUSTOM                  _UxGT("Preheat Custom")
+  #define MSG_PREHEAT_CUSTOM                  _UxGT("Preheat Cust")
 #endif
 #ifndef MSG_COOLDOWN
   #define MSG_COOLDOWN                        _UxGT("Cooldown")
 #endif
 #ifndef MSG_LASER_MENU
-  #define MSG_LASER_MENU                      _UxGT("Laser Control")
+  #define MSG_LASER_MENU                      _UxGT("L-Control")
 #endif
 #ifndef MSG_LASER_OFF
   #define MSG_LASER_OFF                       _UxGT("Laser Off")
@@ -1312,16 +1312,16 @@
   #define MSG_MMU2_MENU                       _UxGT("MMU")
 #endif
 #ifndef MSG_MMU2_WRONG_FIRMWARE
-  #define MSG_MMU2_WRONG_FIRMWARE             _UxGT("Update MMU Firmware!")
+  #define MSG_MMU2_WRONG_FIRMWARE             _UxGT("Update MMU!")
 #endif
 #ifndef MSG_MMU2_NOT_RESPONDING
   #define MSG_MMU2_NOT_RESPONDING             _UxGT("MMU Needs Attention.")
 #endif
 #ifndef MSG_MMU2_RESUME
-  #define MSG_MMU2_RESUME                     _UxGT("Resume Print")
+  #define MSG_MMU2_RESUME                     _UxGT("Resume Job")
 #endif
 #ifndef MSG_MMU2_RESUMING
-  #define MSG_MMU2_RESUMING                   _UxGT("Resuming...")
+  #define MSG_MMU2_RESUMING                   _UxGT("Resuming..")
 #endif
 #ifndef MSG_MMU2_LOAD_FILAMENT
   #define MSG_MMU2_LOAD_FILAMENT              _UxGT("Load Filament")
@@ -1540,7 +1540,7 @@
     #define MSG_FILAMENT_CHANGE_PURGE_1       _UxGT("Purging...")
   #endif
   #ifndef MSG_FILAMENT_CHANGE_CONT_PURGE_1
-    #define MSG_FILAMENT_CHANGE_CONT_PURGE_1  _UxGT("Click to finish")
+    #define MSG_FILAMENT_CHANGE_CONT_PURGE_1  _UxGT("Finish")
   #endif
   #ifndef MSG_FILAMENT_CHANGE_RESUME_1
     #define MSG_FILAMENT_CHANGE_RESUME_1      _UxGT("Resuming...")
@@ -1563,7 +1563,7 @@
   #define MSG_TMC_STEPPING_MODE               _UxGT("Stepping Mode")
 #endif
 #ifndef MSG_TMC_STEALTH_ENABLED
-  #define MSG_TMC_STEALTH_ENABLED             _UxGT("StealthChop Enabled")
+  #define MSG_TMC_STEALTH_ENABLED             _UxGT("S-Chop on")
 #endif
 
 #ifndef MSG_SERVICE_RESET
