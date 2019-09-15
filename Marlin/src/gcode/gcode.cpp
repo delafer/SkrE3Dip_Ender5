@@ -299,6 +299,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 80: G80(); break;                                    // G80: Reset the current motion mode
       #endif
 
+      #if ENABLED(CNC_DRILLING_CYCLE)
+        case 81: G81(); break;                                    // G81: Drilling cycle
+      #endif
+
       case 90: set_relative_mode(false); break;                   // G90: Absolute Mode
       case 91: set_relative_mode(true);  break;                   // G91: Relative Mode
 

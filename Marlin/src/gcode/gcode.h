@@ -463,6 +463,10 @@ private:
     static void G80();
   #endif
 
+  #if ENABLED(CNC_DRILLING_CYCLE)
+    static void G81();
+  #endif
+
   static void G92();
 
   #if ENABLED(CALIBRATION_GCODE)

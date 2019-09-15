@@ -298,7 +298,6 @@ void SPIClass::write(uint16_t data) {
    */
   spi_tx_reg(_currentSetting->spi_d, data); // write the data to be transmitted into the SPI_DR register (this clears the TXE flag)
   waitSpiTxEnd(_currentSetting->spi_d);
-}
 
 void SPIClass::write16(uint16_t data) {
   // Added by stevestrong: write two consecutive bytes in 8 bit mode (DFF=0)
