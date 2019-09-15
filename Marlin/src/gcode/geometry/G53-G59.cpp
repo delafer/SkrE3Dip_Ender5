@@ -31,8 +31,7 @@
 
 /**
  * Select a coordinate system and update the workspace offset.
- * System index -1 is used to specify machine-
- ve.
+ * System index -1 is used to specify machine-native.
  */
 bool GcodeSuite::select_coordinate_system(const int8_t _new) {
   if (active_coordinate_system == _new) return false;
@@ -48,6 +47,7 @@ bool GcodeSuite::select_coordinate_system(const int8_t _new) {
   }
   return true;
 }
+
 /**
  * G53: Apply native workspace to the current move
  *
@@ -65,12 +65,12 @@ void GcodeSuite::G53() {
     report_current_position();
   #endif
 
-  if (parser.chain()) { // If this command has more following...
+  if (parser.chain()) {       // Command to chain?
     process_parsed_command(); // ...process the chained command
     select_coordinate_system(old_system);
     #ifdef DEBUG_M53
       SERIAL_ECHOLNPAIR("Go back to workspace ", old_system);
-    report_current_position();
+      report_current_position();
     #endif
   }
 }

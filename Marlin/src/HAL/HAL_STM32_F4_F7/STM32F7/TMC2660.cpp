@@ -37,7 +37,7 @@
 
 #include "../../../inc/MarlinConfig.h"
 #include "../../../Marlin.h"
-#include "../../../module/stepper_indirection.h"
+#include "../../../module/stepper/indirection.h"
 #include "../../../module/printcounter.h"
 #include "../../../libs/duration_t.h"
 #include "../../../libs/hex_print_routines.h"
@@ -317,8 +317,8 @@ void TMC26XStepper::setCurrent(uint16_t current) {
   }
   #ifdef TMC_DEBUG0 // crashes
     else
-        SERIAL_ECHOPAIR("\nCS: ", current_scaling);
-    #endif
+      SERIAL_ECHOPAIR("\nCS: ", current_scaling);
+  #endif
 
   // do some sanity checks
   NOMORE(current_scaling, 31);
@@ -831,9 +831,8 @@ void TMC26XStepper::debugLastStatus() {
         SERIAL_ECHOPAIR("\n  Stall Guard value:", value);
       }
       else if (readout_config == READ_STALL_GUARD_AND_COOL_STEP) {
-        int16_t stallGuard = value & 0xF, current = value & 0x1F0;
-        SERIAL_ECHOPAIR("\n  Approx Stall Guard: ", stallGuard);
-        SERIAL_ECHOPAIR("\n  Current level", current);
+        SERIAL_ECHOPAIR("\n  Approx Stall Guard: ", value & 0xF);
+        SERIAL_ECHOPAIR("\n  Current level", value & 0x1F0);
       }
     }
   #endif

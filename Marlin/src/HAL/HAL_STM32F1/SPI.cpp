@@ -31,7 +31,7 @@
 
 #ifdef __STM32F1__
 
-#include "SPI.h"
+#include <SPI.h>
 
 #include <libmaple/timer.h>
 #include <libmaple/util.h>
@@ -59,22 +59,22 @@ static spi_baud_rate determine_baud_rate(spi_dev *dev, uint32_t freq);
 
 static const spi_pins board_spi_pins[] __FLASH__ = {
   #if BOARD_NR_SPI >= 1
-  { BOARD_SPI1_NSS_PIN,
-    BOARD_SPI1_SCK_PIN,
-    BOARD_SPI1_MISO_PIN,
-    BOARD_SPI1_MOSI_PIN },
+    { BOARD_SPI1_NSS_PIN,
+      BOARD_SPI1_SCK_PIN,
+      BOARD_SPI1_MISO_PIN,
+      BOARD_SPI1_MOSI_PIN },
   #endif
   #if BOARD_NR_SPI >= 2
-  { BOARD_SPI2_NSS_PIN,
-    BOARD_SPI2_SCK_PIN,
-    BOARD_SPI2_MISO_PIN,
-    BOARD_SPI2_MOSI_PIN },
+    { BOARD_SPI2_NSS_PIN,
+      BOARD_SPI2_SCK_PIN,
+      BOARD_SPI2_MISO_PIN,
+      BOARD_SPI2_MOSI_PIN },
   #endif
   #if BOARD_NR_SPI >= 3
-  { BOARD_SPI3_NSS_PIN,
-    BOARD_SPI3_SCK_PIN,
-    BOARD_SPI3_MISO_PIN,
-    BOARD_SPI3_MOSI_PIN },
+    { BOARD_SPI3_NSS_PIN,
+      BOARD_SPI3_SCK_PIN,
+      BOARD_SPI3_MISO_PIN,
+      BOARD_SPI3_MOSI_PIN },
   #endif
 };
 
@@ -92,7 +92,7 @@ static const spi_pins board_spi_pins[] __FLASH__ = {
  * Constructor
  */
 SPIClass::SPIClass(uint32_t spi_num) {
-  _currentSetting=&_settings[spi_num-1];// SPI channels are called 1 2 and 3 but the array is zero indexed
+  _currentSetting = &_settings[spi_num - 1];  // SPI channels are called 1 2 and 3 but the array is zero indexed
 
   switch (spi_num) {
     #if BOARD_NR_SPI >= 1
@@ -144,7 +144,7 @@ SPIClass::SPIClass(uint32_t spi_num) {
   _currentSetting->state = SPI_STATE_IDLE;
 }
 
-/*
+/**
  * Set up/tear down
  */
 void SPIClass::updateSettings() {
@@ -201,10 +201,10 @@ void SPIClass::setBitOrder(BitOrder bitOrder) {
   _currentSetting->spi_d->regs->CR1 = cr1;
 }
 
-/*  Victor Perez. Added to test changing datasize from 8 to 16 bit modes on the fly.
-* Input parameter should be SPI_CR1_DFF set to 0 or 1 on a 32bit word.
-*
-*/
+/**
+ * Victor Perez. Added to test changing datasize from 8 to 16 bit modes on the fly.
+ * Input parameter should be SPI_CR1_DFF set to 0 or 1 on a 32bit word.
+ */
 void SPIClass::setDataSize(uint32_t datasize) {
   _currentSetting->dataSize = datasize;
   uint32_t cr1 = _currentSetting->spi_d->regs->CR1 & ~(SPI_CR1_DFF);
@@ -214,9 +214,11 @@ void SPIClass::setDataSize(uint32_t datasize) {
 }
 
 void SPIClass::setDataMode(uint8_t dataMode) {
-  /* Notes:
-  As far as I can tell, the AVR numbers for dataMode appear to match the numbers required by the STM32
+  /*
+  Notes:
+  As far as we know the AVR numbers for dataMode match the numbers required by the STM32.
   From the AVR doc http://www.atmel.com/images/doc2585.pdf section 2.4
+
   SPI Mode  CPOL  CPHA  Shift SCK-edge  Capture SCK-edge
   0       0     0     Falling     Rising
   1       0     1     Rising      Falling
@@ -259,8 +261,7 @@ void SPIClass::beginTransactionSlave(SPISettings settings) {
 
 void SPIClass::endTransaction() { }
 
-
-/*
+/**
  * I/O
  */
 
@@ -285,7 +286,7 @@ void SPIClass::read(uint8_t *buf, uint32_t len) {
     interrupts();      // let systick do its job
   }
   // read remaining last byte
-  while ( !(regs->SR & SPI_SR_RXNE) ) {} // wait till data is available in the Rx register
+  while (!(regs->SR & SPI_SR_RXNE)) { /* nada */ } // wait till data is available in the Rx register
   *buf++ = (uint8)(regs->DR);  // read and store the received byte
 }
 
@@ -339,24 +340,25 @@ uint16_t SPIClass::transfer16(uint16_t data) const {
   // Modified by stevestrong: write & read two consecutive bytes in 8 bit mode (DFF=0)
   // This is more effective than two distinct byte transfers
   spi_dev * spi_d = _currentSetting->spi_d;
-  spi_rx_reg(spi_d);                   // read any previous data
-  spi_tx_reg(spi_d, data>>8);          // write high byte
+  spi_rx_reg(spi_d);                              // read any previous data
+  spi_tx_reg(spi_d, data>>8);                     // write high byte
   while (!spi_is_tx_empty(spi_d)) { /* nada */ }  // wait until TXE=1
   while (spi_is_busy(spi_d)) { /* nada */ }       // wait until BSY=0
-  uint16_t ret = spi_rx_reg(spi_d)<<8; // read and shift high byte
-  spi_tx_reg(spi_d, data);             // write low byte
+  uint16_t ret = spi_rx_reg(spi_d)<<8;            // read and shift high byte
+  spi_tx_reg(spi_d, data);                        // write low byte
   while (!spi_is_tx_empty(spi_d)) { /* nada */ }  // wait until TXE=1
   while (spi_is_busy(spi_d)) { /* nada */ }       // wait until BSY=0
-  ret += spi_rx_reg(spi_d);            // read low byte
+  ret += spi_rx_reg(spi_d);                       // read low byte
   return ret;
 }
 
-/*  Roger Clark and Victor Perez, 2015
-* Performs a DMA SPI transfer with at least a receive buffer.
-* If a TX buffer is not provided, FF is sent over and over for the lenght of the transfer.
-* On exit TX buffer is not modified, and RX buffer cotains the received data.
-* Still in progress.
-*/
+/**
+ * Roger Clark and Victor Perez, 2015
+ * Performs a DMA SPI transfer with at least a receive buffer.
+ * If a TX buffer is not provided, FF is sent over and over for the lenght of the transfer.
+ * On exit TX buffer is not modified, and RX buffer cotains the received data.
+ * Still in progress.
+ */
 void SPIClass::dmaTransferSet(const void *transmitBuf, void *receiveBuf) {
   dma_init(_currentSetting->spiDmaDev);
   //spi_rx_dma_enable(_currentSetting->spi_d);
@@ -394,7 +396,7 @@ uint8_t SPIClass::dmaTransferRepeat(uint16_t length) {
   uint8_t b = 0;
   uint32_t m = millis();
   while (!(dma_get_isr_bits(_currentSetting->spiDmaDev, _currentSetting->spiTxDmaChannel) & DMA_ISR_TCIF1)) {
-    //Avoid interrupts and just loop waiting for the flag to be set.
+    // Avoid interrupts and just loop waiting for the flag to be set.
     if ((millis() - m) > DMA_TIMEOUT) { b = 2; break; }
   }
 
@@ -410,7 +412,8 @@ uint8_t SPIClass::dmaTransferRepeat(uint16_t length) {
   return b;
 }
 
-/* Roger Clark and Victor Perez, 2015
+/**
+ * Roger Clark and Victor Perez, 2015
  * Performs a DMA SPI transfer with at least a receive buffer.
  * If a TX buffer is not provided, FF is sent over and over for the length of the transfer.
  * On exit TX buffer is not modified, and RX buffer contains the received data.
@@ -421,7 +424,8 @@ uint8_t SPIClass::dmaTransfer(const void *transmitBuf, void *receiveBuf, uint16_
   return dmaTransferRepeat(length);
 }
 
-/* Roger Clark and Victor Perez, 2015
+/**
+ * Roger Clark and Victor Perez, 2015
  * Performs a DMA SPI send using a TX buffer.
  * On exit TX buffer is not modified.
  * Still in progress.
@@ -442,14 +446,14 @@ uint8_t SPIClass::dmaSendRepeat(uint16_t length) {
   dma_clear_isr_bits(_currentSetting->spiDmaDev, _currentSetting->spiTxDmaChannel);
   dma_set_num_transfers(_currentSetting->spiDmaDev, _currentSetting->spiTxDmaChannel, length);
   _currentSetting->state = SPI_STATE_TRANSMIT;
-  dma_enable(_currentSetting->spiDmaDev, _currentSetting->spiTxDmaChannel);// enable transmit
+  dma_enable(_currentSetting->spiDmaDev, _currentSetting->spiTxDmaChannel);   // enable transmit
   spi_tx_dma_enable(_currentSetting->spi_d);
   if (_currentSetting->transmitCallback) return 0;
 
   uint32_t m = millis();
   uint8_t b = 0;
   while (!(dma_get_isr_bits(_currentSetting->spiDmaDev, _currentSetting->spiTxDmaChannel) & DMA_ISR_TCIF1)) {
-    //Avoid interrupts and just loop waiting for the flag to be set.
+    // Avoid interrupts and just loop waiting for the flag to be set.
     if ((millis() - m) > DMA_TIMEOUT) { b = 2; break; }
   }
   while (!spi_is_tx_empty(_currentSetting->spi_d)) { /* nada */ } // "5. Wait until TXE=1 ..."
@@ -711,10 +715,10 @@ static const spi_baud_rate baud_rates[8] __FLASH__ = {
   SPI_BAUD_PCLK_DIV_256,
 };
 
-/*
-* Note: This assumes you're on a LeafLabs-style board
-* (CYCLES_PER_MICROSECOND == 72, APB2 at 72MHz, APB1 at 36MHz).
-*/
+/**
+ * Note: This assumes you're on a LeafLabs-style board
+ * (CYCLES_PER_MICROSECOND == 72, APB2 at 72MHz, APB1 at 36MHz).
+ */
 static spi_baud_rate determine_baud_rate(spi_dev *dev, uint32_t freq) {
   uint32_t clock = 0;
   switch (rcc_dev_clk(dev->clk_id)) {

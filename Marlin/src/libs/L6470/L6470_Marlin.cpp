@@ -21,7 +21,7 @@
  */
 
 /**
- *  The monitor_driver routines are a close copy of the TMC code
+ * The monitor_driver routines are a close copy of the TMC code
  */
 
 #include "../../inc/MarlinConfig.h"
@@ -32,9 +32,9 @@
 
 L6470_Marlin L6470;
 
-#include "../stepper_indirection.h"
+#include "../../module/stepper/indirection.h"
+#include "../../module/planner.h"
 #include "../../gcode/gcode.h"
-#include "../planner.h"
 
 #define DEBUG_OUT ENABLED(L6470_CHITCHAT)
 #include "../../core/debug_out.h"
@@ -384,8 +384,8 @@ bool L6470_Marlin::get_user_input(uint8_t &driver_count, uint8_t axis_index[3], 
     } break;
 
     case 'Z': {
-      position_min = center[E_AXIS] - displacement;
-      position_max = center[E_AXIS] + displacement;
+      position_min = center[Z_AXIS] - displacement;
+      position_max = center[Z_AXIS] + displacement;
       echo_min_max('Z', position_min, position_max);
       if (false
         #ifdef Z_MIN_POS

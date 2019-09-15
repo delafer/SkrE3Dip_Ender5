@@ -43,16 +43,6 @@
   #define NOT_A_PIN 0 // For PINS_DEBUGGING
 #endif
 
-#if EXTRUDERS == 0
-  #define NO_VOLUMETRICS
-  #undef FWRETRACT
-  #undef LIN_ADVANCE
-  #undef ADVANCED_PAUSE_FEATURE
-  #undef DISABLE_INACTIVE_EXTRUDER
-  #undef EXTRUDER_RUNOUT_PREVENT
-  #undef FILAMENT_LOAD_UNLOAD_GCODES
-#endif
-
 #define HAS_CLASSIC_JERK (IS_KINEMATIC || DISABLED(JUNCTION_DEVIATION))
 
 /**
@@ -76,20 +66,21 @@
 #endif
 
 // Define center values for future use
+#define _X_HALF_BED ((X_BED_SIZE) / 2)
+#define _Y_HALF_BED ((Y_BED_SIZE) / 2)
 #if ENABLED(BED_CENTER_AT_0_0)
   #define X_CENTER 0
   #define Y_CENTER 0
 #else
-  #define X_CENTER ((X_BED_SIZE) / 2)
-  #define Y_CENTER ((Y_BED_SIZE) / 2)
+  #define X_CENTER _X_HALF_BED
+  #define Y_CENTER _Y_HALF_BED
 #endif
-#define Z_CENTER ((Z_MIN_POS + Z_MAX_POS) / 2)
 
 // Get the linear boundaries of the bed
-#define X_MIN_BED (X_CENTER - (X_BED_SIZE) / 2)
-#define X_MAX_BED (X_CENTER + (X_BED_SIZE) / 2)
-#define Y_MIN_BED (Y_CENTER - (Y_BED_SIZE) / 2)
-#define Y_MAX_BED (Y_CENTER + (Y_BED_SIZE) / 2)
+#define X_MIN_BED (X_CENTER - _X_HALF_BED)
+#define X_MAX_BED (X_MIN_BED + X_BED_SIZE)
+#define Y_MIN_BED (Y_CENTER - _Y_HALF_BED)
+#define Y_MAX_BED (Y_MIN_BED + Y_BED_SIZE)
 
 /**
  * Dual X Carriage
@@ -267,7 +258,8 @@
   #define _LCD_CONTRAST_MIN  120
   #define _LCD_CONTRAST_INIT 190
 #elif ENABLED(MKS_MINI_12864)
-  #define _LCD_CONTRAST_INIT 150
+  #define _LCD_CONTRAST_MIN  120
+  #define _LCD_CONTRAST_INIT 195
 #elif ANY(FYSETC_MINI_12864_X_X, FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0, FYSETC_MINI_12864_2_1)
   #define _LCD_CONTRAST_INIT 220
 #elif ENABLED(ULTI_CONTROLLER)
@@ -974,10 +966,10 @@
   #if HOMING_Z_WITH_PROBE
     #undef Z_STALL_SENSITIVITY
   #endif
-  #define X_SENSORLESS (AXIS_HAS_STALLGUARD(X) && defined(X_STALL_SENSITIVITY))
+  #define X_SENSORLESS  (AXIS_HAS_STALLGUARD(X)  && defined(X_STALL_SENSITIVITY))
   #define X2_SENSORLESS (AXIS_HAS_STALLGUARD(X2) && defined(X2_STALL_SENSITIVITY))
-  #define Y_SENSORLESS (AXIS_HAS_STALLGUARD(Y) && defined(Y_STALL_SENSITIVITY))
-  #define Z_SENSORLESS (AXIS_HAS_STALLGUARD(Z) && defined(Z_STALL_SENSITIVITY))
+  #define Y_SENSORLESS  (AXIS_HAS_STALLGUARD(Y)  && defined(Y_STALL_SENSITIVITY))
+  #define Z_SENSORLESS  (AXIS_HAS_STALLGUARD(Z)  && defined(Z_STALL_SENSITIVITY))
   #if ENABLED(SPI_ENDSTOPS)
     #define X_SPI_SENSORLESS X_SENSORLESS
     #define Y_SPI_SENSORLESS Y_SENSORLESS
@@ -1025,6 +1017,13 @@
 #define HAS_TEMP_CHAMBER HAS_TEMP_ADC_CHAMBER
 #define HAS_HEATED_CHAMBER (HAS_TEMP_CHAMBER && PIN_EXISTS(HEATER_CHAMBER))
 
+#if ENABLED(JOYSTICK)
+  #define HAS_JOY_ADC_X  PIN_EXISTS(JOY_X)
+  #define HAS_JOY_ADC_Y  PIN_EXISTS(JOY_Y)
+  #define HAS_JOY_ADC_Z  PIN_EXISTS(JOY_Z)
+  #define HAS_JOY_ADC_EN PIN_EXISTS(JOY_EN)
+#endif
+
 // Heaters
 #define HAS_HEATER_0 (PIN_EXISTS(HEATER_0))
 #define HAS_HEATER_1 (PIN_EXISTS(HEATER_1))
@@ -1036,7 +1035,12 @@
 
 // Shorthand for common combinations
 #define HAS_HEATED_BED (HAS_TEMP_BED && HAS_HEATER_BED)
-#define HAS_TEMP_SENSOR (HAS_TEMP_HOTEND || HAS_HEATED_BED || HAS_TEMP_CHAMBER)
+#define BED_OR_CHAMBER (HAS_HEATED_BED || HAS_TEMP_CHAMBER)
+#define HAS_TEMP_SENSOR (HAS_TEMP_HOTEND || BED_OR_CHAMBER)
+
+#if !HAS_TEMP_SENSOR
+  #undef AUTO_REPORT_TEMPERATURES
+#endif
 
 // PID heating
 #if !HAS_HEATED_BED
@@ -1814,13 +1818,13 @@
   #endif
 #endif
 
-//
-// The external SD card is not used. Hardware SPI is used to access the card.
-// When sharing the SD card with a PC we want the menu options to
-// mount/unmount the card and refresh it. So we disable card detect.
-//
 #if ENABLED(SDSUPPORT)
   #if SD_CONNECTION_IS(ONBOARD) && DISABLED(NO_SD_HOST_DRIVE)
+    //
+    // The external SD card is not used. Hardware SPI is used to access the card.
+    // When sharing the SD card with a PC we want the menu options to
+    // mount/unmount the card and refresh it. So we disable card detect.
+    //
     #undef SD_DETECT_PIN
     #define SHARED_SD_CARD
   #endif

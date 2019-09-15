@@ -22,7 +22,7 @@
 
 #include "../config.h"
 
-#if ENABLED(LULZBOT_TOUCH_UI) && ENABLED(CALIBRATION_GCODE)
+#if BOTH(LULZBOT_TOUCH_UI, CALIBRATION_GCODE)
 
 #include "screens.h"
 
@@ -30,7 +30,7 @@ using namespace ExtUI;
 using namespace Theme;
 
 void ConfirmAutoCalibrationDialogBox::onRedraw(draw_mode_t) {
-  drawMessage(F("For best results, unload the filament and clean the hotend prior to starting calibration. Continue?"));
+  drawMessage(GET_TEXTF(CALIBRATION_WARNING));
   drawYesNoButtons();
 }
 
