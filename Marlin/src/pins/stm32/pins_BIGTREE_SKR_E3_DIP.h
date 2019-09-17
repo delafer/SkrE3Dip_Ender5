@@ -191,11 +191,11 @@
 //
 // SD Support
 //
-#define HAS_ONBOARD_SD
+//#define HAS_ONBOARD_SD
 
-#ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION ONBOARD
-#endif
+//#ifndef SDCARD_CONNECTION
+//  #define SDCARD_CONNECTION ONBOARD
+//#endif
 
-#define ON_BOARD_SPI_DEVICE 1    //SPI1
-#define ONBOARD_SD_CS_PIN  PA4   // Chip select for "System" SD card
+//#define ON_BOARD_SPI_DEVICE 1    //SPI1
+//#define ONBOARD_SD_CS_PIN  PA4   // Chip select for "System" SD card
