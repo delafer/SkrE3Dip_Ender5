@@ -1,0 +1,45 @@
+compiler
+-flto -Os
+-fno-exceptions
+-fno-rtti
+
+-mtune=native
+-fdelete-null-pointer-checks
+-fno-math-errno (as the less abrasive compare to -ffast-math)
+-mlong-calls
+-Wall
+-mcpu=cortex-m3
+-mthumb
+
+-fmessage-length=0
+-mfloat-abi=hard
+-fno-builtin (?)
+--combine (?)
+-fwhole-program
+
+linker
+-specs=nano.specs
+
+
+CFLAGS = -ffunction-sections -fdata-sections
+CXXFLAGS = -fno-rtti -fno-exceptions -Os -fdata-sections -ffunction-sections -Wl,-gc-sections ...
+LDFLAGS = -Wl,-gc-sections -fno-exceptions -fno-rtti ...
+
+
+-fshort-enums
+-finline-limit
+
+LDFLAGS: [-Wl,--gc-sections -flto -L../../tools/gcc-arm-none-eabi-4_9-2015q2/arm-none-eabi/lib/armv6-m -L../../tools/gcc-arm-none-eabi-4_9-2015q2/lib/gcc/arm-none-eabi/4.9.3/armv6-m -Xlinker -Map=_build/testing_s110_xxaa.map -mcpu=cortex-m0 -mthumb -mabi=aapcs -L../../sdk_v6_1/nrf51822/Source/templates/gcc/ -Tgcc_nrf51_s110_xxaa.ld --specs=nano.specs -lc -lnosys]
+
+CFLAGS: [-DDEBUG_NRF_USER -DBLE_STACK_SUPPORT_REQD -DSPI_MASTER_0_ENABLE -DNRF51 -DTOOLCHAIN_GCC_ARM -fno-strict-aliasing -ffunction-sections -fdata-sections -mcpu=cortex-m0 -mthumb -mabi=aapcs -DNRF51 -DBOARD_NRF6310 -DNRF51822_QFAA_CA --std=gnu99 -Wall -o0 -fno-common -fmessage-length=0 -mfloat-abi=soft -fno-exceptions -ffunction-sections -fdata-sections -fomit-frame-pointer --specs=nano.specs ]
+
+
+https://www.anet3d-forum.de/viewtopic.php?t=689
+
+Bed Auto Lvl - Grid; = AUTO_BED_LEVELING_LINEAR?
+
+#define STATUS_MESSAGE_SCROLLING <- try
+//#define LCD_INFO_MENU // enabled, shows useless 'about printer' menu
+//#define SHOW_CUSTOM_BOOTSCREEN // enabled
+//#define CUSTOM_STATUS_SCREEN_IMAGE // enabled
+#define NO_VOLUMETRICS // disabled, not used without width sensor?
