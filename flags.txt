@@ -43,3 +43,22 @@ Bed Auto Lvl - Grid; = AUTO_BED_LEVELING_LINEAR?
 //#define SHOW_CUSTOM_BOOTSCREEN // enabled
 //#define CUSTOM_STATUS_SCREEN_IMAGE // enabled
 #define NO_VOLUMETRICS // disabled, not used without width sensor?
+
+-Xlinker ??
+-flto -fuse-linker-plugin -fno-fat-lto-objects
+-Wl,--gc-sections,--relax
+-fpack-struct
+-funsafe-math-optimizations
+-MMD ???
+
+-Oz instead of -Os
+
+-march=armv7-m  -mcpu=cortex-m3
+--target=arm-none-eabi
+-fmessage-length=0
+-Wall -Wextra ???
+-mfix-cortex-m3-ldrd ??
+
+new lib nano (--enable-newlib-io-long-long)
+-fomit-frame-pointer: tell GCC to optimize for size, not for speed
+-mfloat-abi=softfp
