@@ -54,7 +54,7 @@ Bed Auto Lvl - Grid; = AUTO_BED_LEVELING_LINEAR?
 -Oz instead of -Os
 
 -march=armv7-m  -mcpu=cortex-m3
---target=arm-none-eabi
+--target=arm-none-eabi (arm-none-eabi-gcc)
 -fmessage-length=0
 -Wall -Wextra ???
 -mfix-cortex-m3-ldrd ??
