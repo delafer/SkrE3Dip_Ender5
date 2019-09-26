@@ -14,7 +14,7 @@ compiler
 -fmessage-length=0
 -mfloat-abi=hard
 -fno-builtin (?)
---combine (?)
+--combine (?)Pass multiple source files to compiler at once
 -fwhole-program
 
 linker

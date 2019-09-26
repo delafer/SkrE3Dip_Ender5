@@ -5,7 +5,9 @@ import sys
 if __name__ == "__main__":
   args = " ".join([ "-std=gnu11",
                     "-Os",
+                    #"-march=armv7-m",
                     "-mcpu=cortex-m3",
+                    #"-mfix-cortex-m3-ldrd",
                     "-mthumb",
 
                     "-fsigned-char",
